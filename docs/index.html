@@ -72,7 +72,9 @@
                     if (metadata.route == "/") {
                         connection.send({
                             'type': 'image',
-                            'src': render()
+                            'src': render(content, {
+                                'src': src
+                            })
                         })
                     }
                 })
