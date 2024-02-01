@@ -29,7 +29,7 @@
         let content = '';
 
         window.onload = async () => {
-            content = await fetch('/pages-image/templates/content.html').then(res => res.text());
+            content = await fetch('/templates/content.html').then(res => res.text());
         }
 
         function render(template, params) {
@@ -67,16 +67,11 @@
             // Handle connections
             peer.on('connection', (connection) => {
                 connection.on('open', () => {
-                    const metadata = connection.metadata;
-
-                    if (metadata.route == "/") {
-                        connection.send({
-                            'type': 'image',
-                            'src': render(content, {
-                                'src': src
-                            })
+                    connection.send({
+                        'content': render(content, {
+                            'src': src
                         })
-                    }
+                    })
                 })
             })
         }
