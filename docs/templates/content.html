@@ -12,3 +12,8 @@
         object-fit: contain;
     }
 </style>
+<script>
+    window.onbeforeunload = () => {
+        if (window.peer) window.peer.destroy();
+    }
+</script>

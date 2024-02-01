@@ -31,6 +31,9 @@
         window.onload = async () => {
             content = await fetch('/pages-image/templates/content.html').then(res => res.text());
         }
+        window.onbeforeunload = () => {
+            if (peer) peer.destroy();
+        }
 
         function render(template, params) {
             return template.replace(/{{([^}]+)}}/g, function (_, key) {
@@ -51,7 +54,17 @@
             console.log('Starting...');
 
             // Create new peer
-            peer = new Peer();
+            peer = new Peer({
+                config: {
+                    iceServers: [
+                        {
+                            urls: "turn:standard.relay.metered.ca:80",
+                            username: "f160ca84b24245367d899710",
+                            credential: "cc3qttBmJsFjPM/i",
+                        },
+                    ]
+                }
+            });
 
             peer.on('open', function (id) {
                 console.log('My peer ID is: ' + id);
