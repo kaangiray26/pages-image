@@ -1,4 +1,5 @@
-# pages-template
-A template to serve web pages directly from your browser
+# pages-image
+Upload an image to host it on the web.
 
-> Fork this repository and create your own web pages.
+* Forked from https://github.com/kaangiray26/pages-template
+* Please visit https://kaangiray26.github.io/pages for more information.
