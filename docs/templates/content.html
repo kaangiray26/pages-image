@@ -1,0 +1,26 @@
+<img src="" alt="image" class="img-fluid">
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #d8dee9;
+    }
+
+    .img-fluid {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+</style>
+<script>
+    // Remove the listener for the data event
+    window.connection.off('data');
+
+    // Add the new listener for the data event
+    window.connection.on('data', (data) => {
+        if (data.type == 'image') {
+            document.querySelector('img').src = data.src;
+        }
+    })
+
+</script>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
+    <title>Pages</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+</head>
+
+<body>
+    <div class="container py-4">
+        <h1 class="fw-bold">Pages Images</h1>
+        <hr>
+        <p>Upload an image to host it on the web. Click the start button to start hosting.</p>
+        <div class="mb-3">
+            <input type="file" id="file" accept="image/*" onchange="upload(this.files)">
+        </div>
+        <p id="address" hidden>Hosted on <a id="link" target="_blank" class="fw-bold"></a></p>
+        <div class="d-flex justify-content-start">
+            <button id="start-btn" type="button" class="btn btn-primary" onclick="start()">Start</button>
+            <button id="stop-btn" type="button" class="btn btn-danger" onclick="stop()" hidden>Stop</button>
+        </div>
+    </div>
+    <script>
+        let src = '';
+        let peer = null;
+
+        async function upload(event) {
+            const file = event[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                src = reader.result;
+            }
+        }
+
+        async function start() {
+            console.log('Starting...');
+
+            // Create new peer
+            peer = new Peer();
+
+            peer.on('open', function (id) {
+                console.log('My peer ID is: ' + id);
+                document.querySelector('#address').hidden = false;
+                document.querySelector('#link').href = 'https://kaangiray26.github.io/pages/' + id;
+                document.querySelector('#link').innerHTML = 'https://kaangiray26.github.io/pages/' + id;
+
+                // Change button states
+                document.querySelector('#start-btn').hidden = true;
+                document.querySelector('#stop-btn').hidden = false;
+            });
+
+            // Handle connections
+            peer.on('connection', (connection) => {
+                connection.on('open', () => {
+                    const metadata = connection.metadata;
+
+                    if (metadata.route == "/") {
+                        connection.send({
+                            'type': 'image',
+                            'src': content
+                        })
+                    }
+                })
+            })
+        }
+
+        async function stop() {
+            console.log('Stopping...');
+            // Close all connections
+            if (peer) peer.destroy();
+
+            // Change button states
+            document.querySelector('#stop-btn').hidden = true;
+            document.querySelector('#start-btn').hidden = false;
+        }
+    </script>
+</body>
+
+</html>
