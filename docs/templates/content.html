@@ -12,15 +12,3 @@
         object-fit: contain;
     }
 </style>
-<script>
-    // Remove the listener for the data event
-    window.connection.off('data');
-
-    // Add the new listener for the data event
-    window.connection.on('data', (data) => {
-        if (data.type == 'image') {
-            document.querySelector('img').src = data.src;
-        }
-    })
-
-</script>
