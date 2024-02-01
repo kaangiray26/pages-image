@@ -26,6 +26,17 @@
     <script>
         let src = '';
         let peer = null;
+        let content = '';
+
+        window.onload = async () => {
+            content = await fetch('/pages-image/templates/content.html').then(res => res.text());
+        }
+
+        function render(template, params) {
+            return template.replace(/{{([^}]+)}}/g, function (_, key) {
+                return params[key];
+            });
+        }
 
         async function upload(event) {
             const file = event[0];
@@ -61,7 +72,7 @@
                     if (metadata.route == "/") {
                         connection.send({
                             'type': 'image',
-                            'src': src
+                            'src': render()
                         })
                     }
                 })
